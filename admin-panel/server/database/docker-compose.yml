@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15.3
+    container_name: soilintellect
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: soilintellect
+      POSTGRES_PASSWORD: soilintellect
+      POSTGRES_DB: soilintellect
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:

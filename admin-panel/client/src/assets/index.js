@@ -1,0 +1,8 @@
+export { default as SoilIntellectLogo } from './logos/soil-intellect-logo.svg'
+export { default as SoilIntellectLogoDarkMode } from './logos/soil-intellect-logo-dark-mode.svg'
+export { default as LoginSplitScreenImage } from './images/login-split-screen.svg'
+export { default as SignupSplitScreenImage } from './images/signup-split-screen.svg'
+export { default as CheckEmail } from './images/check-email.svg'
+export { default as Warning } from './images/warning.svg'
+export { default as GoogleIcon } from './icons/google.jsx'
+export { default as ExitIcon } from './icons/exit.jsx'
