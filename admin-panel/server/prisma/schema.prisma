@@ -27,6 +27,8 @@ model User {
   updatedAt                   DateTime        @updatedAt
   deletedAt                   DateTime?
   socialProfiles              SocialProfile[]
+  samples                     Sample[]
+  results                     Result[]
 }
 
 model SocialProfile {
@@ -44,3 +46,36 @@ enum SocialAuthProvider {
   GOOGLE
 }
 
+model Sample {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  N           Float?
+  P           Float?
+  K           Float?
+  temperature Float?
+  humidity    Float?
+  ph          Float?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  results     Result[]
+}
+
+model Result {
+  id          String     @id @default(uuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sampleId    String
+  sample      Sample     @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+  type        ResultType
+  class       String
+  probability Float
+  createdAt   DateTime   @default(now())
+  deletedAt   DateTime?
+}
+
+enum ResultType {
+  IMPLANT
+  SOILTYPE
+}
