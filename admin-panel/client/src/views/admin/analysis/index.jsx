@@ -5,7 +5,7 @@ import ManualAnalysis from './components/manual/manual-analysis'
 const AnalysisSection = () => {
   return (
     <Flex flex={1} justifyContent='center'>
-      <Tabs variant='soft-rounded' colorScheme='green' width={{ base: '100%', md: '40%' }}>
+      <Tabs variant='soft-rounded' colorScheme='green' width='100%'>
         <TabList alignItems='center' justifyContent='center'>
           <Tab>Manual Analysis</Tab>
           <Tab>Sensor Analysis</Tab>

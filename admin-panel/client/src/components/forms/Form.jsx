@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react'
 import { Formik } from 'formik'
 import PropTypes from 'prop-types'
 
@@ -5,7 +6,8 @@ function Form ({
   initialValues,
   validationSchema,
   handleSubmit,
-  children
+  children,
+  ...rest
 }) {
   return (
     <Formik
@@ -14,7 +16,7 @@ function Form ({
       onSubmit={handleSubmit}
     >
       {formikProps => (
-        <form onSubmit={formikProps.handleSubmit}>{children}</form>
+        <Box as='form' { ...rest } onSubmit={formikProps.handleSubmit}>{children}</Box>
       )}
     </Formik>
   )

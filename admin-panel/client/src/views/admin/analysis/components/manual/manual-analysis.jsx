@@ -1,14 +1,25 @@
 import { useState } from 'react'
 
-import { Button, Spinner, useColorModeValue, useToast } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  Spinner,
+  useColorModeValue,
+  useToast
+} from '@chakra-ui/react'
 import axios from 'axios'
 import * as Yup from 'yup'
 
 import { Form, Input } from '@components'
 import { getCookies } from '@utils/cookies'
+import ManualAnalysisResult from './result'
 
 const ManualAnalysis = () => {
   const [loading, setLoading] = useState(false)
+  const [testSuccess, setTestSuccess] = useState(false)
+  const [predictionData, setPredictionData] = useState(null)
+  const [sampleProperties, setSampleProperties] = useState(null)
+
   const toast = useToast()
 
   const { accessToken } = getCookies()
@@ -48,7 +59,7 @@ const ManualAnalysis = () => {
       .required('PH is required')
   })
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     setLoading(true)
     try {
       const numericValues = {
@@ -59,7 +70,14 @@ const ManualAnalysis = () => {
         humidity: parseFloat(values.humidity),
         ph: parseFloat(values.ph)
       }
-      const response = await axios.post(import.meta.env.VITE_URL_MANUAL_PREDICTION_API, numericValues, { headers })
+      setSampleProperties(numericValues)
+      const response = await axios.post(
+        import.meta.env.VITE_URL_MANUAL_PREDICTION_API,
+        numericValues,
+        { headers }
+      )
+      setPredictionData(response.data.result)
+      setTestSuccess(true)
     } catch (error) {
       toast({
         title: 'Error',
@@ -73,31 +91,37 @@ const ManualAnalysis = () => {
     }
   }
   return (
-    <Form
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      handleSubmit={handleSubmit}
-    >
-      <Input paddingY={1} name='N' label='Nitrogen' />
-      <Input paddingY={1} name='P' label='Phosphorus' />
-      <Input paddingY={1} name='K' label='Potassium' />
-      <Input paddingY={1} name='temperature' label='Temperature' />
-      <Input paddingY={1} name='humidity' label='Humidity' />
-      <Input paddingY={1} name='ph' label='PH' />
-      <Button
-        marginY={2}
-        _hover={{ bgColor: 'teal' }}
-        color={useColorModeValue('white', 'black')}
-        backgroundColor={useColorModeValue(
-          'lightMode.primary',
-          'darkMode.primary'
-        )}
-        width='100%'
-        type='submit'
+    <Flex flex={1} justifyContent='center'>
+      {testSuccess
+        ? <ManualAnalysisResult predictionData={predictionData} sampleProperties={sampleProperties}/>
+        : <Form
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        handleSubmit={handleSubmit}
+        width={{ base: '100%', md: '40%' }}
       >
-        {loading ? <Spinner size='sm' /> : 'Start the test'}
-      </Button>
-    </Form>
+        <Input paddingY={1} name='N' label='Nitrogen' />
+        <Input paddingY={1} name='P' label='Phosphorus' />
+        <Input paddingY={1} name='K' label='Potassium' />
+        <Input paddingY={1} name='temperature' label='Temperature' />
+        <Input paddingY={1} name='humidity' label='Humidity' />
+        <Input paddingY={1} name='ph' label='PH' />
+        <Button
+          marginY={2}
+          _hover={{ bgColor: 'teal', color: 'white' }}
+          color={useColorModeValue('white', 'black')}
+          backgroundColor={useColorModeValue(
+            'lightMode.primary',
+            'darkMode.primary'
+          )}
+          width='100%'
+          type='submit'
+        >
+          {loading ? <Spinner size='sm' /> : 'Start the test'}
+        </Button>
+      </Form>
+}
+    </Flex>
   )
 }
 
