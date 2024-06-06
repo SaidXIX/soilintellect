@@ -12,6 +12,7 @@ const httpStatus = require('./src/utils/http-status')
 const { apiLimiter } = require('./src/utils/api-limiter')
 const routes = require('./src/routes/router')
 const normalizePort = require('./src/utils/normalize-port')
+require('./src/utils/serial')
 
 const app = express()
 
