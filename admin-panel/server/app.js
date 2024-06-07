@@ -1,6 +1,7 @@
 const HTTP = require('http')
 const chalk = require('chalk')
 const express = require('express')
+const socketIO = require('socket.io')
 const cors = require('cors')
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
@@ -12,9 +13,11 @@ const httpStatus = require('./src/utils/http-status')
 const { apiLimiter } = require('./src/utils/api-limiter')
 const routes = require('./src/routes/router')
 const normalizePort = require('./src/utils/normalize-port')
-require('./src/utils/serial')
+require('./src/modules/sensor/serial')
 
 const app = express()
+const server = HTTP.createServer(app)
+const io = socketIO(server)
 
 app.use(cookieParser())
 app.use(helmet())
@@ -32,8 +35,11 @@ app.get('/api/health', (req, res) => {
 app.use('/api', apiLimiter)
 app.use('/api', routes)
 
+io.on('connection', (socket) => {
+  console.log('CLIENT IS CONNECTED')
+})
+
 const port = normalizePort(process.env.PORT || 4000)
-const server = HTTP.createServer(app)
 
 server.listen(port, () => {
   console.log(`host: ${chalk.bgBlue(`http://localhost:${port}`)}`)

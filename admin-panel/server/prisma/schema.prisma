@@ -59,7 +59,7 @@ model Sample {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
-  results     Result[]
+  results     Result?
 }
 
 model Result {
