@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Layout from '@layouts/Layout'
-import { Home, Weather, Analysis, Help, Login, Signup, VerifyEmailRedirect, RequestPasswordReset, PasswordReset, Zone } from '@views'
+import { Home, Weather, Analysis, Help, Login, Signup, VerifyEmailRedirect, RequestPasswordReset, PasswordReset, Zone, Sensor } from '@views'
 import PublicRoute from './elements/PublicRoute'
 import ProtectedRoute from './elements/ProtectedRoute'
 
@@ -22,6 +22,7 @@ const Router = () => {
             <Route index element={<Home/>}/>
             <Route path="/weather" element={<Weather/>}/>
             <Route path="/zone" element={<Zone/>}/>
+            <Route path="/zone/sensor/:zoneId" element={<Sensor/>}/>
             <Route path="/analysis" element={<Analysis/>}/>
             <Route path="/help" element={<Help/>}/>
           </Route>

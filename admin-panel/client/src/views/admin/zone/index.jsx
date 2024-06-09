@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { FaChartLine } from 'react-icons/fa6'
 import { FaMapMarkerAlt } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 
 import { getCookies } from '@utils/cookies'
 import CreateZone from './components/create'
@@ -31,6 +32,8 @@ const ZoneSection = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [zoneCreated, setZoneCreated] = useState(false)
+
+  const navigate = useNavigate()
 
   const { accessToken } = getCookies()
 
@@ -71,6 +74,10 @@ const ZoneSection = () => {
 
   const handleDeleteZone = (deletedZoneId) => {
     setZones((prevZones) => prevZones.filter((zone) => zone.id !== deletedZoneId))
+  }
+
+  const handleZoneClicked = (zoneId) => {
+    navigate(`/zone/sensor/${zoneId}`)
   }
 
   const renderLocationLink = (location) => {
@@ -136,6 +143,7 @@ const ZoneSection = () => {
                         fontSize='md'
                         fontWeight='bold'
                         colorScheme='teal'
+                        onClick={() => handleZoneClicked(zone.id)}
                         icon={<FaChartLine />}
                       />
                       <DeleteZone zoneId={zone.id} zoneName={zone.name} onDeleteZone={handleDeleteZone}/>

@@ -1,6 +1,10 @@
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 
+const EventEmitter = require('events')
+class DataEmitter extends EventEmitter {}
+const dataEmitter = new DataEmitter()
+
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
@@ -29,9 +33,9 @@ parser.on('data', async (data) => {
   try {
     if (data.trim().startsWith('{') && data.trim().endsWith('}')) {
       const sensorData = JSON.parse(data)
-      console.log(sensorData)
       if (isSaving) {
         await saveToDatabase(sensorData)
+        dataEmitter.emit('dataInserted', sensorData)
       }
     } else {
     //   console.error('Invalid data format received:', data)
@@ -74,3 +78,5 @@ const saveToDatabase = async (data) => {
     console.log('SAVING SENSOR DATA ERROR', error)
   }
 }
+
+module.exports = { dataEmitter }

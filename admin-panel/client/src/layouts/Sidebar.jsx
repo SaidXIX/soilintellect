@@ -17,7 +17,7 @@ import { SoilIntellectLogo, SoilIntellectLogoDarkMode } from '@assets'
 const LinkItems = [
   { name: 'Home', icon: GoHomeFill, path: '/' },
   { name: 'Weather', icon: FaCloudSun, path: '/weather' },
-  { name: 'Zones', icon: FaMapLocationDot, path: '/zone' },
+  { name: 'Zone Sensor Data', icon: FaMapLocationDot, path: '/zone' },
   { name: 'Analysis', icon: BiSolidAnalyse, path: '/analysis' },
   { name: 'Help Center', icon: BiSolidHelpCircle, path: '/help' }
 ]
