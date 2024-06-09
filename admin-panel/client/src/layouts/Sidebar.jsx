@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import PropTypes from 'prop-types'
 import { GoHomeFill } from 'react-icons/go'
-import { FaCloudSun } from 'react-icons/fa6'
+import { FaCloudSun, FaMapLocationDot } from 'react-icons/fa6'
 import { BiSolidAnalyse, BiSolidHelpCircle } from 'react-icons/bi'
 
 import { SoilIntellectLogo, SoilIntellectLogoDarkMode } from '@assets'
@@ -17,6 +17,7 @@ import { SoilIntellectLogo, SoilIntellectLogoDarkMode } from '@assets'
 const LinkItems = [
   { name: 'Home', icon: GoHomeFill, path: '/' },
   { name: 'Weather', icon: FaCloudSun, path: '/weather' },
+  { name: 'Zones', icon: FaMapLocationDot, path: '/zone' },
   { name: 'Analysis', icon: BiSolidAnalyse, path: '/analysis' },
   { name: 'Help Center', icon: BiSolidHelpCircle, path: '/help' }
 ]

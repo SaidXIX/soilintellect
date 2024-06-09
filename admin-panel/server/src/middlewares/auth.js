@@ -20,8 +20,8 @@ exports.verifyAuthorization = async (req, res, next) => {
     }
 
     delete user.password
-
     req.user = user
+
     next()
   } catch (error) {
     console.error('FROM THE MIDDLEWARE', error)

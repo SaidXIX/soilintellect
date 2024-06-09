@@ -29,7 +29,7 @@ parser.on('data', async (data) => {
   try {
     if (data.trim().startsWith('{') && data.trim().endsWith('}')) {
       const sensorData = JSON.parse(data)
-
+      console.log(sensorData)
       if (isSaving) {
         await saveToDatabase(sensorData)
       }
@@ -47,7 +47,7 @@ port.on('error', (err) => {
 
 const saveToDatabase = async (data) => {
   try {
-    const { N, P, K, humidity, temperature, ph, userId } = data
+    const { N, P, K, humidity, temperature, ph, userId, zoneId } = data
 
     await prisma.sample.create({
       data: {
@@ -60,6 +60,11 @@ const saveToDatabase = async (data) => {
         user: {
           connect: {
             id: userId
+          }
+        },
+        zone: {
+          connect: {
+            id: zoneId
           }
         }
       }

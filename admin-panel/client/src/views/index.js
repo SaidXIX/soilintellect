@@ -1,6 +1,7 @@
 export { default as Home } from './admin/home/index'
 export { default as Weather } from './admin/weather/index'
 export { default as Analysis } from './admin/analysis/index'
+export { default as Zone } from './admin/zone/index'
 export { default as Help } from './admin/help/index'
 export { default as Login } from './auth/login/index'
 export { default as Signup } from './auth/signup/index'

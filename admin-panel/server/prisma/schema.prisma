@@ -14,31 +14,32 @@ datasource db {
 }
 
 model User {
-  id                          String          @id @default(uuid())
-  email                       String          @unique
+  id                          String           @id @default(uuid())
+  email                       String           @unique
   firstName                   String
   familyName                  String
   password                    String?
-  verified                    Boolean         @default(false)
-  verificationToken           String?         @unique
-  passwordResetToken          String?         @unique
+  verified                    Boolean          @default(false)
+  verificationToken           String?          @unique
+  passwordResetToken          String?          @unique
   passwordResetTokenExpiresAt DateTime?
-  createdAt                   DateTime        @default(now())
-  updatedAt                   DateTime        @updatedAt
+  createdAt                   DateTime         @default(now())
+  updatedAt                   DateTime         @updatedAt
   deletedAt                   DateTime?
   socialProfiles              SocialProfile[]
   samples                     Sample[]
   results                     Result[]
+  zones                       Zone[]
 }
 
 model SocialProfile {
-  id         Int                @id @default(autoincrement())
-  provider   SocialAuthProvider @default(GOOGLE)
+  id         Int                 @id @default(autoincrement())
+  provider   SocialAuthProvider  @default(GOOGLE)
   providerId String
   userId     String
   user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
   deletedAt  DateTime?
 }
 
@@ -46,24 +47,39 @@ enum SocialAuthProvider {
   GOOGLE
 }
 
+model Zone {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  location  String
+  implant   String
+  samples   Sample[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+}
+
 model Sample {
-  id          String    @id @default(uuid())
+  id          String     @id @default(uuid())
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  zoneId      String
+  zone        Zone      @relation(fields: [zoneId], references: [id], onDelete: Cascade)
   N           Float?
   P           Float?
   K           Float?
   temperature Float?
   humidity    Float?
   ph          Float?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   deletedAt   DateTime?
-  results     Result?
+  results     Result[]
 }
 
 model Result {
-  id          String     @id @default(uuid())
+  id          String      @id @default(uuid())
   userId      String
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   sampleId    String
@@ -71,7 +87,7 @@ model Result {
   type        ResultType
   class       String
   probability Float
-  createdAt   DateTime   @default(now())
+  createdAt   DateTime    @default(now())
   deletedAt   DateTime?
 }
 
