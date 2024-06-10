@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react'
 
 import {
@@ -5,17 +6,15 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   Button,
   useDisclosure,
   Divider,
-  Box,
-  AbsoluteCenter,
   Text,
   HStack,
-  useToast
+  useToast,
+  Spinner
 } from '@chakra-ui/react'
 import { GrTest } from 'react-icons/gr'
 import * as Yup from 'yup'
@@ -25,11 +24,9 @@ import axios from 'axios'
 import { Form, Input, Select } from '@components'
 import { getCookies } from '@utils/cookies'
 
-const AnalysisModal = () => {
+const AnalysisModal = ({ onPredictionExecuted }) => {
   const [loading, setLoading] = useState(false)
-  const [testSuccess, setTestSuccess] = useState(false)
-  const [predictionData, setPredictionData] = useState(null)
-  const [sampleProperties, setSampleProperties] = useState(null)
+  const [avgLoading, setAvgLoading] = useState(false)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { zoneId } = useParams()
@@ -49,7 +46,7 @@ const AnalysisModal = () => {
 
   const validationSchema = Yup.object().shape({
     number: Yup.number('this must be a number')
-      .min(0, 'must be a non-negative number')
+      .min(0, 'must be a non-negative number').max(20, 'must not be higher than 20')
       .required('Number is required'),
     orderBy: Yup.string().required('this field is required')
   })
@@ -58,8 +55,7 @@ const AnalysisModal = () => {
     setLoading(true)
     try {
       const response = await axios.get(`${import.meta.env.VITE_URL_INSTANT_PREDICTION_API}/${zoneId}`, { headers })
-      setPredictionData(response.data.result)
-      setTestSuccess(true)
+      onPredictionExecuted(response.data.result, response.data.sampleProperties)
     } catch (error) {
       toast({
         title: 'Error',
@@ -70,16 +66,30 @@ const AnalysisModal = () => {
       })
     } finally {
       setLoading(false)
+      onClose()
     }
   }
 
   const handleSubmit = async (values) => {
-    setLoading(true)
+    setAvgLoading(true)
     try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_URL_AVERAGE_PREDICTION_API}/${zoneId}`,
+        { number: values.number, orderBy: values.orderBy },
+        { headers }
+      )
+      onPredictionExecuted(response.data.result, response.data.averageValues)
     } catch (error) {
-
+      toast({
+        title: 'Error',
+        description: 'An error occurred, please try again later',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      })
     } finally {
-      setLoading(false)
+      setAvgLoading(false)
+      onClose()
     }
   }
   return (
@@ -100,7 +110,7 @@ const AnalysisModal = () => {
           <ModalCloseButton />
           <ModalBody textAlign='center'>
             <Button my={2} colorScheme='teal' fontWeight={500} onClick={handleInstantPrediction}>
-              Start an instant analysis
+            {loading ? <Spinner size='sm' /> : 'Start an instant test'}
             </Button>
             <Divider py={2} />
             <Text py={2}>
@@ -119,7 +129,7 @@ const AnalysisModal = () => {
                   Close
                 </Button>
                 <Button fontWeight={400} colorScheme='blue' type='submit'>
-                  Confirm
+                {avgLoading ? <Spinner size='sm' /> : 'Confirm'}
                 </Button>
               </HStack>
             </Form>

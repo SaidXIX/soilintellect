@@ -20,3 +20,22 @@ exports.getLastSample = async ({ userId, zoneId }) => {
     throw createError.InternalServerError()
   }
 }
+
+exports.getSamples = async ({ userId, zoneId, number, sortOrder }) => {
+  try {
+    const samples = await prisma.sample.findMany({
+      where: {
+        userId,
+        zoneId
+      },
+      orderBy: {
+        createdAt: sortOrder
+      },
+      take: number
+    })
+    return { samples }
+  } catch (error) {
+    console.error('Error in getSamples:', error)
+    throw createError.InternalServerError()
+  }
+}

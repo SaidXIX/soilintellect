@@ -6,12 +6,16 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { IoChevronBackOutline } from 'react-icons/io5'
 
 import AnalysisModal from './components/analysis-modal'
+import ManualAnalysisResult from '../manual-analysis/components/result'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 const Sensor = () => {
   const { zoneId } = useParams()
   const [sensorData, setSensorData] = useState([])
+  const [testSuccess, setTestSuccess] = useState(false)
+  const [predictionData, setPredictionData] = useState(null)
+  const [sampleProperties, setSampleProperties] = useState(null)
 
   const navigate = useNavigate()
 
@@ -41,15 +45,21 @@ const Sensor = () => {
     }
   }, [zoneId])
 
+  const hanldlePredictionExecuted = (predictionData, sampleProperties) => {
+    setTestSuccess(true)
+    setPredictionData(predictionData)
+    setSampleProperties(sampleProperties)
+  }
   return (
     <Box justifyContent='center' alignItems='center' width='100%' display='flex' flexDirection='column'>
       <HStack width='100%' justifyContent='space-between'>
         <Button onClick={() => navigate('/zone')} leftIcon={<IoChevronBackOutline/>} fontWeight={500} variant='outline' colorScheme='teal'>
           Back
         </Button>
-       <AnalysisModal />
+       <AnalysisModal onPredictionExecuted={hanldlePredictionExecuted}/>
       </HStack>
-      {sensorData.length > 0 && (
+      { testSuccess && <ManualAnalysisResult predictionData={predictionData} sampleProperties={sampleProperties}/>}
+      {sensorData.length > 0 && !testSuccess && (
         <Box width='70%'>
           <Line data={{
             labels: sensorData.map(data => new Date(data.createdAt).toLocaleTimeString()),
