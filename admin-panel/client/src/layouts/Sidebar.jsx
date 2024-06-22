@@ -18,7 +18,7 @@ const LinkItems = [
   { name: 'Home', icon: GoHomeFill, path: '/' },
   { name: 'Weather', icon: FaCloudSun, path: '/weather' },
   { name: 'Zone Sensor Data', icon: FaMapLocationDot, path: '/zone' },
-  { name: 'Analysis', icon: BiSolidAnalyse, path: '/analysis' },
+  { name: 'Manual Analysis', icon: BiSolidAnalyse, path: '/analysis' },
   { name: 'Help Center', icon: BiSolidHelpCircle, path: '/help' }
 ]
 

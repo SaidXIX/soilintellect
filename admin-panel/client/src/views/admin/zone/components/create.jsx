@@ -154,8 +154,7 @@ const CreateZone = ({ onZoneCreated }) => {
   }
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    implant: Yup.string().required('Implant is required')
+    name: Yup.string().required('Name is required')
   })
 
   const handleSubmit = async values => {

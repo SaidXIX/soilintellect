@@ -20,6 +20,7 @@ import { MdOutlineRestartAlt } from 'react-icons/md'
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
+import Diagnostic from './diagnostic'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -183,12 +184,12 @@ const ManualAnalysisResult = ({ predictionData, sampleProperties }) => {
                 </Text>
               </VStack>
             </HStack>
-            <VStack>
-              <Text>
+            {/* <VStack>
+              <Text fontSize='xs' textAlign='justify'>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Officiis illum,
               </Text>
-            </VStack>
+            </VStack> */}
             <Badge colorScheme='blue'>OVERALL CLASSIFICATION</Badge>
           </Stack>
         </HStack>
@@ -201,18 +202,7 @@ const ManualAnalysisResult = ({ predictionData, sampleProperties }) => {
           boxShadow='lg'
           borderRadius='0.3em'
         >
-          <Text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
-            molestias totam, aut placeat nihil provident odio eligendi
-            consequuntur aspernatur mollitia, veniam ducimus dolorum laudantium
-            exercitationem velit consectetur non atque voluptatibus.
-          </Text>
-          <Text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
-            molestias totam, aut placeat nihil provident odio eligendi
-            consequuntur aspernatur mollitia, veniam ducimus dolorum laudantium
-            exercitationem velit consectetur non atque voluptatibus.
-          </Text>
+          <Diagnostic implantType={predictionData.prediction.T1[0].Class}/>
         </VStack>
         <VStack flex={1} alignItems='end' justifyContent='stretch' width='100%'>
           <HStack>

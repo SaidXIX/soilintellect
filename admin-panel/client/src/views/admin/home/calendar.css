@@ -1,0 +1,19 @@
+  .react-calendar {
+    width: 100%;
+    background: none;
+    border: none;
+    font-size: 0.9em;
+    font-family:'poppins';
+  }
+  .react-calendar__tile {
+    border-radius: 1em;
+  }
+  .react-calendar__tile--active {
+    background: #00ED64;
+    color: white;
+    border-radius: 0.75em;
+  }
+  .react-calendar__tile:hover {
+    background: #e0e0e0;
+    color: black;
+  }

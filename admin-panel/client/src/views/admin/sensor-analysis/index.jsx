@@ -60,7 +60,47 @@ const Sensor = () => {
       </HStack>
       { testSuccess && <ManualAnalysisResult predictionData={predictionData} sampleProperties={sampleProperties}/>}
       {sensorData.length > 0 && !testSuccess && (
+        <HStack width='100%' justifyContent='center'>
         <Box width='70%'>
+        <HStack>
+          <Line data={{
+            labels: sensorData.map(data => new Date(data.createdAt).toLocaleTimeString()),
+            datasets: [
+              {
+                label: 'N',
+                data: sensorData.map(data => data.N),
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+                tension: 0.1
+              },
+              {
+                label: 'P',
+                data: sensorData.map(data => data.P),
+                borderColor: 'rgb(54, 162, 235)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+                tension: 0.1
+              },
+              {
+                label: 'K',
+                data: sensorData.map(data => data.K),
+                borderColor: 'rgb(255, 205, 86)',
+                backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                fill: true,
+                tension: 0.1
+              }
+            ]
+          }}
+        options={{
+          scales: {
+            yAxis: {
+              min: 0,
+              max: 255
+            }
+          }
+        }} />
+        </HStack>
           <Line data={{
             labels: sensorData.map(data => new Date(data.createdAt).toLocaleTimeString()),
             datasets: [
@@ -96,7 +136,14 @@ const Sensor = () => {
                 tension: 0.1
               }
             ]
-          }} />
+          }} options={{
+            scales: {
+              yAxis: {
+                min: 0,
+                max: 255
+              }
+            }
+          }}/>
           <Line data={{
             labels: sensorData.map(data => new Date(data.createdAt).toLocaleTimeString()),
             datasets: [
@@ -107,7 +154,14 @@ const Sensor = () => {
                 tension: 0.1
               }
             ]
-          }} />
+          }} options={{
+            scales: {
+              yAxis: {
+                min: 0,
+                max: 255
+              }
+            }
+          }}/>
           <Line data={{
             labels: sensorData.map(data => new Date(data.createdAt).toLocaleTimeString()),
             datasets: [
@@ -118,7 +172,14 @@ const Sensor = () => {
                 tension: 0.1
               }
             ]
-          }} />
+          }} options={{
+            scales: {
+              yAxis: {
+                min: 0,
+                max: 255
+              }
+            }
+          }}/>
           <Line data={{
             labels: sensorData.map(data => new Date(data.createdAt).toLocaleTimeString()),
             datasets: [
@@ -159,6 +220,7 @@ const Sensor = () => {
           }}
           />
         </Box>
+        </HStack>
       )}
     </Box>
   )
