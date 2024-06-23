@@ -3,7 +3,6 @@ const yup = require('yup')
 const axios = require('axios')
 const PDFDocument = require('pdfkit')
 const path = require('path')
-const { v4: uuidv4 } = require('uuid')
 
 const httpStatus = require('../../utils/http-status')
 const { getValidationErrors } = require('../../utils/get-validation-errors')
