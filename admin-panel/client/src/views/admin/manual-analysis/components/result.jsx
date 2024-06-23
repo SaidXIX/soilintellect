@@ -15,12 +15,13 @@ import {
   VStack
 } from '@chakra-ui/react'
 import { RiSeedlingFill } from 'react-icons/ri'
-import { FaMountainSun, FaDownload } from 'react-icons/fa6'
+import { FaMountainSun } from 'react-icons/fa6'
 import { MdOutlineRestartAlt } from 'react-icons/md'
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 import Diagnostic from './diagnostic'
+import DownloadReportButton from './download-report'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -206,15 +207,7 @@ const ManualAnalysisResult = ({ predictionData, sampleProperties }) => {
         </VStack>
         <VStack flex={1} alignItems='end' justifyContent='stretch' width='100%'>
           <HStack>
-            <Button
-                marginY={2}
-                variant='outline'
-                colorScheme='teal'
-                size='sm'
-                leftIcon={<FaDownload size={17}/>}
-            >
-                Download Report
-            </Button>
+            <DownloadReportButton />
             <Button
                 marginY={2}
                 _hover={{ bgColor: 'teal', color: 'white' }}

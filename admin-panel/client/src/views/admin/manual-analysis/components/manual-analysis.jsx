@@ -77,6 +77,14 @@ const ManualAnalysis = () => {
         { headers }
       )
       setPredictionData(response.data.result)
+      const { prediction } = response.data.result
+
+      const predictionDataToLocalStrg = {
+        prediction,
+        sampleProperties: numericValues
+      }
+
+      localStorage.setItem('predictionData', JSON.stringify(predictionDataToLocalStrg))
       setTestSuccess(true)
     } catch (error) {
       toast({

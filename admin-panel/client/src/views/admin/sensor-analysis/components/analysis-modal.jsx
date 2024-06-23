@@ -56,6 +56,14 @@ const AnalysisModal = ({ onPredictionExecuted }) => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_URL_INSTANT_PREDICTION_API}/${zoneId}`, { headers })
       onPredictionExecuted(response.data.result, response.data.sampleProperties)
+      const { prediction } = response.data.result
+
+      const predictionDataToLocalStrg = {
+        prediction,
+        sampleProperties: response.data.sampleProperties
+      }
+
+      localStorage.setItem('predictionData', JSON.stringify(predictionDataToLocalStrg))
     } catch (error) {
       toast({
         title: 'Error',
@@ -79,6 +87,14 @@ const AnalysisModal = ({ onPredictionExecuted }) => {
         { headers }
       )
       onPredictionExecuted(response.data.result, response.data.averageValues)
+      const { prediction } = response.data.result
+
+      const predictionDataToLocalStrg = {
+        prediction,
+        sampleProperties: response.data.averageValues
+      }
+
+      localStorage.setItem('predictionData', JSON.stringify(predictionDataToLocalStrg))
     } catch (error) {
       toast({
         title: 'Error',

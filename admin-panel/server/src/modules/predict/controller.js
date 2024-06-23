@@ -1,6 +1,9 @@
 /* eslint-disable camelcase */
 const yup = require('yup')
 const axios = require('axios')
+const PDFDocument = require('pdfkit')
+const path = require('path')
+const { v4: uuidv4 } = require('uuid')
 
 const httpStatus = require('../../utils/http-status')
 const { getValidationErrors } = require('../../utils/get-validation-errors')
@@ -158,6 +161,72 @@ exports.AveragePrediction = async (req, res, next) => {
     })
   } catch (error) {
     console.error('Error in AveragePrediction:', error)
+    return next({
+      status: error.status || 500,
+      message: error.message,
+      errors: error.errors
+    })
+  }
+}
+
+exports.GeneratePdf = async (req, res, next) => {
+  try {
+    const { prediction, sampleProperties, diagnostics } = req.body
+
+    const doc = new PDFDocument()
+
+    res.setHeader('Content-disposition', 'attachment; filename="prediction_data.pdf"')
+    res.setHeader('Content-type', 'application/pdf')
+
+    doc.pipe(res)
+
+    const logoPath = path.resolve(__dirname, 'logo.png')
+    doc.image(logoPath, 230, 25, { width: 150 })
+
+    // Full Report title
+    doc.fontSize(20).text('Full Report', { align: 'center', underline: true })
+    doc.moveDown()
+
+    // Date and Time
+    const now = new Date()
+    const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`
+    const formattedTime = now.toLocaleTimeString('en-US', { hour12: true })
+    doc.fontSize(14).text(`Date: ${formattedDate}`, { align: 'center' })
+    doc.fontSize(14).text(`Time: ${formattedTime}`, { align: 'center' })
+    doc.moveDown()
+
+    // Soil Type
+    doc.fontSize(18).text('Soil Type:', { bold: true })
+    prediction.T1.forEach((item) => {
+      doc.fontSize(14).text(`${item.Class}: ${item.Probability}%`)
+    })
+    doc.moveDown()
+
+    // Crop Recommendation
+    doc.fontSize(18).text('Crop Recommendation:', { bold: true })
+    prediction.T2.forEach((item) => {
+      doc.fontSize(14).text(`${item.Class}: ${item.Probability}%`)
+    })
+    doc.moveDown()
+
+    // Sample Properties
+    doc.fontSize(18).text('Sample Properties:', { bold: true })
+    Object.entries(sampleProperties).forEach(([key, value]) => {
+      doc.fontSize(14).text(`${key}: ${value}`)
+    })
+    doc.moveDown()
+
+    // Diagnostics
+    doc.fontSize(18).text('Diagnostics:', { bold: true })
+    doc.fontSize(14).text('Soil and Water Requirements:', { underline: true })
+    doc.text(diagnostics.soilWater)
+    doc.moveDown()
+    doc.fontSize(14).text('Planting and Maintenance:', { underline: true })
+    doc.text(diagnostics.plantingMaintenance)
+
+    doc.end()
+  } catch (error) {
+    console.error('Error in Generating pdf:', error)
     return next({
       status: error.status || 500,
       message: error.message,
