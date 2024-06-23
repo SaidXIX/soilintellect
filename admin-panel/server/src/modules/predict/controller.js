@@ -183,11 +183,9 @@ exports.GeneratePdf = async (req, res, next) => {
     const logoPath = path.resolve(__dirname, 'logo.png')
     doc.image(logoPath, 230, 25, { width: 150 })
 
-    // Full Report title
     doc.fontSize(20).text('Full Report', { align: 'center', underline: true })
     doc.moveDown()
 
-    // Date and Time
     const now = new Date()
     const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`
     const formattedTime = now.toLocaleTimeString('en-US', { hour12: true })
@@ -195,28 +193,24 @@ exports.GeneratePdf = async (req, res, next) => {
     doc.fontSize(14).text(`Time: ${formattedTime}`, { align: 'center' })
     doc.moveDown()
 
-    // Soil Type
     doc.fontSize(18).text('Soil Type:', { bold: true })
     prediction.T1.forEach((item) => {
       doc.fontSize(14).text(`${item.Class}: ${item.Probability}%`)
     })
     doc.moveDown()
 
-    // Crop Recommendation
     doc.fontSize(18).text('Crop Recommendation:', { bold: true })
     prediction.T2.forEach((item) => {
       doc.fontSize(14).text(`${item.Class}: ${item.Probability}%`)
     })
     doc.moveDown()
 
-    // Sample Properties
     doc.fontSize(18).text('Sample Properties:', { bold: true })
     Object.entries(sampleProperties).forEach(([key, value]) => {
       doc.fontSize(14).text(`${key}: ${value}`)
     })
     doc.moveDown()
 
-    // Diagnostics
     doc.fontSize(18).text('Diagnostics:', { bold: true })
     doc.fontSize(14).text('Soil and Water Requirements:', { underline: true })
     doc.text(diagnostics.soilWater)
