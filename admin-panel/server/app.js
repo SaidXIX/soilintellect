@@ -82,7 +82,7 @@ app.get('/api/health', (req, res) => {
   })
 })
 
-app.use('/api', apiLimiter)
+// app.use('/api', apiLimiter)
 app.use('/api', routes)
 
 // WebSocket server

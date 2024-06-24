@@ -1,5 +1,5 @@
 const httpStatus = require('../../utils/http-status')
-const { getUserZones, createZone, deleteZone } = require('./service')
+const { getUserZones, createZone, deleteZone, updateZone } = require('./service')
 
 exports.getZones = async (req, res, next) => {
   try {
@@ -64,6 +64,39 @@ exports.removeZone = async (req, res, next) => {
       return res.status(httpStatus.OK).send({
         success: true,
         message: 'zone deleted successfully'
+      })
+    } else {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        success: false,
+        message: 'Error occured when trying to create the zone'
+      })
+    }
+  } catch (error) {
+    return next({
+      status: error.status || 500,
+      errors: error.errors,
+      message: error.message
+    })
+  }
+}
+
+exports.updateZone = async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    const zoneId = req.params.id
+    const { name, implant, location } = req.body
+
+    const { updatedZone } = await updateZone({ userId, zoneId, name, location, implant })
+
+    if (updatedZone) {
+      return res.status(httpStatus.CREATED).send({
+        success: true,
+        message: 'Zone has been updated successfully',
+        zone: {
+          name,
+          location,
+          implant
+        }
       })
     } else {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({

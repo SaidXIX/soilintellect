@@ -56,3 +56,23 @@ exports.deleteZone = async ({ zoneId, userId }) => {
     throw createError.InternalServerError()
   }
 }
+
+exports.updateZone = async ({ zoneId, userId, name, implant, location }) => {
+  try {
+    const updatedZone = await prisma.zone.update({
+      where: {
+        id: zoneId,
+        userId
+      },
+      data: {
+        name,
+        implant,
+        location
+      }
+    })
+    return { updatedZone }
+  } catch (error) {
+    console.log(error)
+    throw createError.InternalServerError()
+  }
+}

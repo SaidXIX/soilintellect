@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom'
 import { getCookies } from '@utils/cookies'
 import CreateZone from './components/create'
 import DeleteZone from './components/delete'
+import UpdateZone from './components/update'
 
 const ZoneSection = () => {
   const [zones, setZones] = useState([])
@@ -70,6 +71,10 @@ const ZoneSection = () => {
     } else {
       console.error('New zone is missing required properties:', newZone)
     }
+  }
+
+  const handleUpdateZone = (updatedZone) => {
+    window.location.reload()
   }
 
   const handleDeleteZone = (deletedZoneId) => {
@@ -147,6 +152,7 @@ const ZoneSection = () => {
                         icon={<FaChartLine />}
                       />
                       <DeleteZone zoneId={zone.id} zoneName={zone.name} onDeleteZone={handleDeleteZone}/>
+                      <UpdateZone zoneId={zone.id} onZoneUpdated={handleUpdateZone}/>
                     </HStack>
                   </Td>
                 </Tr>
